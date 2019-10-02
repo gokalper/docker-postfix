@@ -1,5 +1,5 @@
-FROM alpine:latest
-LABEL maintaner="Bojan Cekrlic - https://github.com/bokysan/docker-postfix/"
+FROM arm64v8/alpine:latest
+LABEL maintaner="Gokalp Ercilasun - https://github.com/gokalper/docker-postfix/"
 
 # See README.md for details
 
