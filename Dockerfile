@@ -1,4 +1,4 @@
-FROM arm64v8/alpine:latest
+FROM arm32v7/alpine:latest
 LABEL maintaner="Gokalp Ercilasun - https://github.com/gokalper/docker-postfix/"
 
 # See README.md for details
