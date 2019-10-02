@@ -1,5 +1,5 @@
 # docker-postfix
-Simple postfix relay host for your Docker containers. Based on Alpine Linux.
+Simple postfix relay host for your Docker containers. Based on Alpine Linux for ARM32V7 - IE RASPBERRY PI DEVICES
 
 
 ## Project update
@@ -16,9 +16,15 @@ This is a _server side_ POSTFIX image, geared towards emails that need to be sen
 
 ## TL;DR
 
+To create the container:
+
+```
+docker build smtp/alpine:latest .
+```
+
 To run the container, do the following:
 ```
-docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com" -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com" -p 1587:587 smtp/alpine
 ```
 
 You can now send emails by using `localhost:1587` as your SMTP server address. Of course, if
@@ -54,7 +60,7 @@ the default Docker host name will be used. A lot of times, this will be just the
 which may make it difficult to track your emails in the log files. If you care about tracking at all,
 I suggest you set this variable, e.g.:
 ```
-docker run --rm --name postfix -e HOSTNAME=postfix-docker -p 1587:587 boky/postfix
+docker run --rm --name postfix -e HOSTNAME=postfix-docker -p 1587:587 smtp/alpine
 ```
 
 ### `RELAYHOST`, `RELAYHOST_USERNAME` and `RELAYHOST_PASSWORD`
@@ -65,22 +71,22 @@ you will most likely have a dedicated outgoing mail server. By setting this opti
 
 Example:
 ```
-docker run --rm --name postfix -e RELAYHOST=192.168.115.215 -p 1587:587 boky/postfix
+docker run --rm --name postfix -e RELAYHOST=192.168.115.215 -p 1587:587 smtp/alpine
 ```
 
 You may optionally specifiy a relay port, e.g.:
 ```
-docker run --rm --name postfix -e RELAYHOST=192.168.115.215:587 -p 1587:587 boky/postfix
+docker run --rm --name postfix -e RELAYHOST=192.168.115.215:587 -p 1587:587 smtp/alpine
 ```
 
 Or an IPv6 address, e.g.:
 ```
-docker run --rm --name postfix -e 'RELAYHOST=[2001:db8::1]:587' -p 1587:587 boky/postfix
+docker run --rm --name postfix -e 'RELAYHOST=[2001:db8::1]:587' -p 1587:587 smtp/alpine
 ```
 
 If your end server requires you to authenticate with username/password, add them also:
 ```
-docker run --rm --name postfix -e RELAYHOST=mail.google.com -e RELAYHOST_USERNAME=hello@gmail.com -e RELAYHOST_PASSWORD=world -p 1587:587 boky/postfix
+docker run --rm --name postfix -e RELAYHOST=mail.google.com -e RELAYHOST_USERNAME=hello@gmail.com -e RELAYHOST_PASSWORD=world -p 1587:587 smtp/alpine
 ```
 
 ### `RELAYHOST_TLS_LEVEL`
@@ -110,7 +116,7 @@ override this setting.
 
 Example:
 ```
-docker run --rm --name postfix -e "MYNETWORKS=10.1.2.0/24" -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "MYNETWORKS=10.1.2.0/24" -p 1587:587 smtp/alpine
 ```
 
 ### `ALLOWED_SENDER_DOMAINS`
@@ -120,7 +126,7 @@ sender domains -- the domains you are using to send your emails from, otherwise 
 
 Example:
 ```
-docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -p 1587:587 smtp/alpine
 ```
 
 ### `INBOUND_DEBUGGING`
@@ -135,7 +141,7 @@ If you don't want outbound mails to expose hostnames, you can use this variable 
 
 Example:
 ```
-docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -e "MASQUERADED_DOMAINS=example.com" -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -e "MASQUERADED_DOMAINS=example.com" -p 1587:587 smtp/alpine
 ```
 
 ## `DKIM`
@@ -163,7 +169,7 @@ done
 Add the created `<domain>.txt` files to your DNS records. Afterwards, just mount `/etc/opendkim/keys` into your image and DKIM 
 will be used automatically, e.g.:
 ```
-docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -v /host/keys:/etc/opendkim/keys -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -v /host/keys:/etc/opendkim/keys -p 1587:587 smtp/alpine
 ```
 
 ## Extending the image
@@ -174,7 +180,7 @@ startup script.
 
 E.g.: create a custom `Dockerfile` like this:
 ```
-FROM boky/postfix
+FROM smtp/alpine
 LABEL maintainer="Jack Sparrow <jack.sparrow@theblackpearl.example.com>"
 ADD Dockerfiles/additional-config.sh /docker-init.db/
 ```
